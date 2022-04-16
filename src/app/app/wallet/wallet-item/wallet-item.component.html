@@ -1,17 +1,50 @@
 <div class="container">
-  <div class="row" (click)="onClick()">
+  <div class="row" (click)="expandItem()">
     <div class="title">{{ purchase.title }}</div>
 
-    <tui-badge
-      class="support-1"
-      status="success"
-      [value]="formattedPrice"
-      [hoverable]="true"
-    ></tui-badge>
+    <div>
+      <tui-badge
+        class="support-1"
+        status="success"
+        [value]="formattedPrice"
+        [hoverable]="true">
+      </tui-badge>
+
+      <button
+        tuiIconButton
+        type="button"
+        appearance="delete"
+        icon="tuiIconCloseLarge"
+        size="xs"
+        (click)="deletePurchase()">
+      </button>
+    </div>
   </div>
 
-  <div *ngIf="expanded && (purchase.date || purchase.comment)">
-    <div class="row">{{ purchase.date }}</div>
-    <div class="row">{{ purchase.comment }}</div>
-  </div>
+  <tui-expand [expanded]="expanded">
+    <ng-template tuiExpandContent>
+
+        <tui-island class="purchase-info">
+
+          <p class="tui-island__category">{{ formattedDate }}</p>
+          <h3 class="tui-island__title">{{ purchase.title }}</h3>
+          <p class="tui-island__paragraph">
+            {{ purchase.comment }}
+          </p>
+          <button
+            class="edit-button"
+            tuiIconButton
+            type="button"
+            appearance="edit"
+            icon="tuiIconEdit"
+            (click)="toggle()">
+          </button>
+          <tui-expand class="purchase-editor" [expanded]="editorExpanded">
+            <app-wallet-add (add)="editPurchase($event)" mode="edit" [purchase]="purchase"></app-wallet-add>
+          </tui-expand>
+
+        </tui-island>
+
+    </ng-template>
+  </tui-expand>
 </div>

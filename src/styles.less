@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+tui-wrapper[data-appearance='delete'] {
+  color: var(--tui-negative);
+  opacity: 0.5;
+
+  &[data-state='hovered'] {
+      opacity: 1;
+  }
+}
+
+tui-wrapper[data-appearance='edit'] {
+  color: var(--tui-link);
+  opacity: 0.5;
+
+  &[data-state='hovered'] {
+      opacity: 1;
+  }
+}

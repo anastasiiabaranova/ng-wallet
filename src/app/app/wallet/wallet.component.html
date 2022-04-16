@@ -18,14 +18,16 @@
   <app-wallet-add *ngIf="expanded" (add)="addPurchase($event)"></app-wallet-add>
 
   <app-wallet-item 
-    *ngFor="let p of purchases; index as i" 
+    *ngFor="let p of purchasesService.purchases; index as i" 
     [purchase]="p" 
-    [expanded]="expandedItemIndex === i"
-    (onItemClick)="expandPurchase($event)">
+    [expanded]="expandedItemId === p.id"
+    (expand)="expandPurchase($event)"
+    (edit)="editPurchase($event)"
+    (delete)="delPurchase($event)">
   </app-wallet-item>
 
   <div class="footer">
     <span class="caption">Итого:&nbsp;</span>
-    <strong>{{ summary }}💰</strong>
+    <strong>{{ purchasesService.summary }}💰</strong>
   </div>
 </div>

@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Purchase} from '../../../../shared/models/Purchase';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Purchase } from '../../../../shared/models/Purchase';
 
 @Component({
   selector: 'app-wallet-item',
@@ -7,18 +7,41 @@ import {Purchase} from '../../../../shared/models/Purchase';
   styleUrls: ['./wallet-item.component.less']
 })
 export class WalletItemComponent {
-  
+
   @Input() purchase!: Purchase;
-  @Input() expanded!: Boolean;
+  @Input() expanded!: boolean;
 
   @Output()
-  onItemClick = new EventEmitter<Purchase>();
+  expand = new EventEmitter<Purchase>();
+  @Output()
+  edit = new EventEmitter<Purchase>();
+  @Output()
+  delete = new EventEmitter<Purchase>();
+
+  editorExpanded = false;
 
   get formattedPrice(): string {
     return `${this.purchase.price} ₽`;
   }
 
-  onClick(): void {
-    this.onItemClick.emit(this.purchase);
+  get formattedDate(): string {
+    return `${this.purchase.date}`.substring(0, 10);
+  }
+
+  expandItem(): void {
+    this.expand.emit(this.purchase);
+  }
+
+  deletePurchase(): void {
+    this.delete.emit(this.purchase);
+  }
+
+  editPurchase(purchase: Purchase): void {
+    this.edit.emit(purchase);
+    this.toggle();
+  }
+
+  toggle(): void {
+    this.editorExpanded = !this.editorExpanded
   }
 }

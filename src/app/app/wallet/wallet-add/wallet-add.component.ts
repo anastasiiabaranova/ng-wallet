@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import { TuiDay } from '@taiga-ui/cdk';
 import {Purchase} from '../../../../shared/models/Purchase';
@@ -12,7 +12,10 @@ function isInvalid(input: AbstractControl | null): boolean {
   templateUrl: './wallet-add.component.html',
   styleUrls: ['./wallet-add.component.less']
 })
-export class WalletAddComponent {
+export class WalletAddComponent implements OnInit {
+  @Input() mode: "add" | "edit" = "add";
+  @Input() purchase?: Purchase;
+
   @Output()
   add = new EventEmitter<Purchase>();
 
@@ -40,6 +43,18 @@ export class WalletAddComponent {
   });
 
   constructor(private fb: FormBuilder) { }
+
+  ngOnInit(): void {
+    if (this.mode === "edit") {
+      if (this.purchase === undefined) {
+        throw new Error("Purchase required for edit mode.");
+      }
+      this.form.get('inputTitle')?.setValue(this.purchase.title);
+      this.form.get('inputPrice')?.setValue(this.purchase.price);
+      this.form.get('inputDate')?.setValue(TuiDay.fromLocalNativeDate(this.purchase.date));
+      this.form.get('inputComment')?.setValue(this.purchase.comment);
+    }
+  }
 
   get titleError(): string | undefined {
     const input = this.form.get('inputTitle');
@@ -74,6 +89,10 @@ export class WalletAddComponent {
     return undefined;
   }
 
+  get submitText(): string {
+    return this.mode === "add" ? "Добавить" : "Изменить";
+  }
+
   getInvalid(inputName: string): boolean {
     return isInvalid(this.form.get(inputName));
   }
@@ -84,13 +103,18 @@ export class WalletAddComponent {
 
     const purchase = {
       title: formData['inputTitle'],
-      price: formData['inputPrice'],
+      price: Number(formData['inputPrice']),
       date: formData['inputDate'] ? formData['inputDate'] : TuiDay.currentLocal(),
     }
 
     const comment = formData['inputComment'];
+    const id = this.purchase?.id;
     
-    const result = Object.assign({...purchase}, comment && {comment});
+    const result = Object.assign(
+      {...purchase},
+      comment && {comment},
+      id && {id}
+    );
     
     this.add.emit(result);
 
