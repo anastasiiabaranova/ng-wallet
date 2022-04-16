@@ -1,0 +1,45 @@
+<form class="form" [formGroup]="form" (submit)="submit()">
+  <div class="tui-form__row">
+    <tui-input tuiTextfieldSize="s" formControlName="inputTitle">
+      Название
+    </tui-input>
+
+    <div *ngIf="getInvalid('inputTitle')" class="invalid-input">
+      {{ titleError }}
+    </div>
+  </div>
+
+  <div class="tui-form__row">
+    <tui-input tuiTextfieldSize="s" formControlName="inputPrice">
+      Стоимость
+    </tui-input>
+
+    <div *ngIf="getInvalid('inputPrice')" class="invalid-input">
+      {{ priceError }}
+    </div>
+  </div>
+
+  <div class="tui-form__row">
+    <tui-input-date tuiTextfieldSize="s" formControlName="inputDate">
+      Дата
+    </tui-input-date>
+  </div>
+
+  <div class="tui-form__row">
+    <tui-text-area tuiTextfieldSize="m" formControlName="inputComment">
+      Комментарий
+    </tui-text-area>
+  </div>
+
+  <div class="tui-form__row buttons">
+    <button
+      [disabled]="form.invalid"
+      tuiButton
+      class="tui-form__button"
+      size="s"
+      type="submit"
+    >
+      Добавить
+    </button>
+  </div>
+</form>

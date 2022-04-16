@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="row" (click)="onClick()">
+    <div class="title">{{ purchase.title }}</div>
+
+    <tui-badge
+      class="support-1"
+      status="success"
+      [value]="formattedPrice"
+      [hoverable]="true"
+    ></tui-badge>
+  </div>
+
+  <div *ngIf="expanded && (purchase.date || purchase.comment)">
+    <div class="row">{{ purchase.date }}</div>
+    <div class="row">{{ purchase.comment }}</div>
+  </div>
+</div>
