@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-const host = 'http://localhost:3000';
+const host = 'http://tfs';
 
 @Injectable()
 export class PurchasesApiService implements IPurchasesApiService {
