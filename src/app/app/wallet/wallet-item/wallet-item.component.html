@@ -40,7 +40,7 @@
             (click)="toggle()">
           </button>
           <tui-expand class="purchase-editor" [expanded]="editorExpanded">
-            <app-wallet-add (add)="editPurchase($event)" mode="edit" [purchase]="purchase"></app-wallet-add>
+            <app-wallet-add (add)="editPurchase($event)" [edit]="purchase"></app-wallet-add>
           </tui-expand>
 
         </tui-island>

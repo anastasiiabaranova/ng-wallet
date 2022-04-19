@@ -18,8 +18,8 @@ export class WalletComponent implements OnInit {
     this.purchasesService.initialize();
   }
 
-  expandPurchase(purchase: Purchase): void {
-    this.expandedItemId = purchase.id !== this.expandedItemId ? purchase.id : null;
+  expandPurchase({id}: Purchase): void {
+    this.expandedItemId = id !== this.expandedItemId ? id : null;
   }
 
   addPurchase(purchase: Purchase): void {

@@ -31,19 +31,22 @@ export class PurchasesService {
 
   addPurchase(purchase: Purchase): void {
     this.purchasesApiService.add(purchase).subscribe(() => {
-      this.initialize();
+      this._purchases.push(purchase);
+      this.updateSummary();
     });
   }
 
   editPurchase(purchase: Purchase): void {
     this.purchasesApiService.edit(purchase).subscribe(() => {
-      this.initialize();
+      this._purchases = this._purchases.map(p => p.id === purchase.id ? purchase : p);
+      this.updateSummary();
     });
   }
 
   delPurchase(purchase: Purchase): void {
     this.purchasesApiService.delete(purchase.id!).subscribe(() => {
-      this.initialize();
+      this._purchases = this._purchases.filter(p => p.id !== purchase.id);
+      this.updateSummary();
     });
   }
 
