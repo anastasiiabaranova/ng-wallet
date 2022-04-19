@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, Validators} from '@angular/forms';
 import { TuiDay } from '@taiga-ui/cdk';
 import {Purchase} from '../../../../shared/models/Purchase';
-
 function isInvalid(input: AbstractControl | null): boolean {
   return input !== null && input.invalid && input.touched;
 }
@@ -39,7 +38,23 @@ export class WalletAddComponent {
     inputComment: [null],
   });
 
+  submitText: string = "Добавить";
+
+  editId: string | undefined = undefined;
+
   constructor(private fb: FormBuilder) { }
+
+  @Input()
+  set edit(purchase: Purchase) {
+    this.submitText = "Изменить";
+    this.editId = purchase.id;
+    this.form.patchValue({
+      inputTitle: purchase?.title,
+      inputPrice: purchase?.price,
+      inputDate: TuiDay.fromLocalNativeDate(purchase?.date!),
+      inputComment: purchase?.comment,
+    });
+  }
 
   get titleError(): string | undefined {
     const input = this.form.get('inputTitle');
@@ -84,13 +99,19 @@ export class WalletAddComponent {
 
     const purchase = {
       title: formData['inputTitle'],
-      price: formData['inputPrice'],
-      date: formData['inputDate'] ? formData['inputDate'] : TuiDay.currentLocal(),
+      price: Number(formData['inputPrice']),
+      date: formData['inputDate']
+        ? (formData['inputDate'] as TuiDay).toLocalNativeDate()
+        : new Date(),
     }
 
     const comment = formData['inputComment'];
     
-    const result = Object.assign({...purchase}, comment && {comment});
+    const result = Object.assign(
+      {...purchase},
+      comment && {comment},
+      this.editId && {id: this.editId}
+    );
     
     this.add.emit(result);
 
